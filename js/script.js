@@ -1,4 +1,7 @@
 const essentialFields = 'name,flags,capital,region,population';
+const COUNTRIES_PER_PAGE = 8;
+let globalCountriesList = [];
+let currentPage = 1;
 
 document.addEventListener("DOMContentLoaded", () => {
     const menuToggle = document.getElementById("menuToggle");
@@ -8,10 +11,37 @@ document.addEventListener("DOMContentLoaded", () => {
         mainNav.classList.toggle("menu-open");
         menuToggle.classList.toggle("open");
     });
+
+    document.getElementById("searchBtn").addEventListener("click", () => {
+        const name = document.getElementById("searchInput").value.trim();
+
+        if (name === "") {
+            fetchAllCountries();
+        } else {
+            searchCountry(name);
+        }
+    });
+
+    document.getElementById("searchInput").addEventListener("keypress", e => {
+        if (e.key === "Enter") {
+            document.getElementById("searchBtn").click();
+        }
+    });
+
+    document.getElementById("continentFilter").addEventListener("change", e => {
+        filterByContinent(e.target.value);
+    });
+
+    fetchAllCountries();
 });
 
 function showLoading() {
     document.getElementById("loading").classList.remove("hidden");
+    document.getElementById("countriesList").innerHTML = "";
+    const paginationContainer = document.getElementById("pagination");
+    if (paginationContainer) {
+        paginationContainer.innerHTML = "";
+    }
 }
 
 function hideLoading() {
@@ -29,9 +59,10 @@ async function fetchAllCountries() {
         }
 
         const data = await response.json();
-        
+
         if (Array.isArray(data) && data.length > 0) {
-            renderCountries(data);
+            globalCountriesList = data;
+            displayCountriesPage(1);
         } else {
             throw new Error("A API retornou um formato inesperado ou lista vazia.");
         }
@@ -52,16 +83,19 @@ async function searchCountry(name) {
 
         if (!response.ok) {
             if (response.status === 404) {
-                 document.getElementById("countriesList").innerHTML = `
+                document.getElementById("countriesList").innerHTML = `
                     <p class="not-found-message">Nenhum país encontrado com o nome: <strong>${name}</strong>.</p>
                  `;
-                 return; 
+                const paginationContainer = document.getElementById("pagination");
+                if (paginationContainer) paginationContainer.innerHTML = "";
+                return;
             }
             throw new Error(`Erro na busca. Status: ${response.status}`);
         }
 
         const data = await response.json();
-        renderCountries(data);
+        globalCountriesList = data;
+        displayCountriesPage(1);
 
     } catch (error) {
         alert("Erro: " + error.message);
@@ -88,7 +122,8 @@ async function filterByContinent(continent) {
         }
 
         const data = await response.json();
-        renderCountries(data);
+        globalCountriesList = data;
+        displayCountriesPage(1);
 
     } catch (error) {
         alert("Erro: " + error.message);
@@ -97,52 +132,82 @@ async function filterByContinent(continent) {
     }
 }
 
+function displayCountriesPage(page) {
+    if (!globalCountriesList || globalCountriesList.length === 0) {
+        renderCountries([]);
+        return;
+    }
+
+    currentPage = page;
+    const startIndex = (currentPage - 1) * COUNTRIES_PER_PAGE;
+    const endIndex = startIndex + COUNTRIES_PER_PAGE;
+
+    const countriesToRender = globalCountriesList.slice(startIndex, endIndex);
+
+    renderCountries(countriesToRender);
+    renderPaginationControls();
+}
+
 function renderCountries(list) {
     const container = document.getElementById("countriesList");
     container.innerHTML = "";
-    
+
     if (!Array.isArray(list) || list.length === 0) {
         container.innerHTML = "<p>Nenhum país encontrado para o filtro selecionado.</p>";
         return;
     }
 
     list.forEach(country => {
-        const flagSrc = country.flags.svg || country.flags.png; 
+        const flagSrc = country.flags.svg || country.flags.png;
 
         const card = `
             <div class="country-card">
-                <img src="${flagSrc}" alt="Flag of ${country.name.common}">
+                <img src="${flagSrc}" alt="Bandeira de ${country.name.common}">
                 <h3>${country.name.common}</h3>
                 <p><strong>Capital:</strong> ${country.capital?.[0] || "N/A"}</p>
-                <p><strong>Region:</strong> ${country.region || "N/A"}</p>
-                <p><strong>Population:</strong> ${country.population?.toLocaleString() || "N/A"}</p>
+                <p><strong>Região:</strong> ${country.region || "N/A"}</p>
+                <p><strong>População:</strong> ${country.population?.toLocaleString() || "N/A"}</p>
             </div>
         `;
         container.innerHTML += card;
     });
 }
 
-document.addEventListener("DOMContentLoaded", () => {
+function renderPaginationControls() {
+    const totalCountries = globalCountriesList.length;
+    const totalPages = Math.ceil(totalCountries / COUNTRIES_PER_PAGE);
+    const paginationContainer = document.getElementById("pagination");
 
-    fetchAllCountries();
+    if (!paginationContainer) return;
 
-    document.getElementById("searchBtn").addEventListener("click", () => {
-        const name = document.getElementById("searchInput").value.trim();
+    paginationContainer.innerHTML = "";
 
-        if (name === "") {
-            fetchAllCountries();
-        } else {
-            searchCountry(name);
-        }
-    });
+    if (totalPages <= 1) {
+        return;
+    }
 
-    document.getElementById("searchInput").addEventListener("keypress", e => {
-        if (e.key === "Enter") {
-            document.getElementById("searchBtn").click();
-        }
-    });
+    let buttonsHTML = '';
 
-    document.getElementById("continentFilter").addEventListener("change", e => {
-        filterByContinent(e.target.value);
-    });
-});
+    buttonsHTML += `<button ${currentPage === 1 ? 'disabled' : ''} onclick="displayCountriesPage(${currentPage - 1})">Anterior</button>`;
+
+    const maxButtons = 5;
+    let start = Math.max(1, currentPage - Math.floor(maxButtons / 2));
+    let end = Math.min(totalPages, start + maxButtons - 1);
+
+    if (end - start + 1 < maxButtons) {
+        start = Math.max(1, end - maxButtons + 1);
+    }
+
+    for (let i = start; i <= end; i++) {
+        buttonsHTML += `
+            <button class="page-btn ${i === currentPage ? 'active' : ''}" 
+                    onclick="displayCountriesPage(${i})">
+                ${i}
+            </button>
+        `;
+    }
+
+    buttonsHTML += `<button ${currentPage === totalPages ? 'disabled' : ''} onclick="displayCountriesPage(${currentPage + 1})">Próxima</button>`;
+
+    paginationContainer.innerHTML = buttonsHTML;
+}
