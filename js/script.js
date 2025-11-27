@@ -9,4 +9,3 @@ document.addEventListener("DOMContentLoaded", () => {
         menuToggle.classList.toggle("open");
     });
 });
-

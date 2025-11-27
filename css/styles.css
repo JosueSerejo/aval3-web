@@ -221,14 +221,15 @@ ul {
 
 h1{
     text-align: center;
-    margin-top: 1.5rem;
+    margin-top: 1rem;
+    margin-bottom: 1rem;
     color: var(--secondary-color);
 }
 
 .search-filter-wrapper {
     padding: 2rem 1rem;
     border-radius: 10px;
-    background: url("./img/bg/bg.png") center/cover no-repeat;
+    background: url("../img/bg/bg.png") center/cover no-repeat;
 }
 
 .search-filter-row {
