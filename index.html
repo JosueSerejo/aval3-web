@@ -5,15 +5,14 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="css/styles.css">
-    <title>Country Explorer</title>
+    <title>Countree</title>
 </head>
 
 <body>
-
     <header class="main-header">
         <div class="container nav-container">
             <a href="#" class="logo">
-                <img src="/img/logo/Countree.png" alt="logo countree">
+                <img src="./img/logo/Countree.png" alt="logo countree">
             </a>
 
             <input type="checkbox" id="menu-toggle" class="menu-toggle" style="display: none;">
@@ -32,8 +31,42 @@
         </div>
     </header>
 
+    <main class="container">
+
+        <h1>Encontre o país que você procura</h1>
+
+        <section class="search-area">
+
+            <div class="search-filter-wrapper">
+
+                <div class="search-filter-row">
+
+                    <div class="search-box">
+                        <input type="text" id="searchInput" placeholder="Buscar país..." />
+                        <button id="searchBtn">Buscar</button>
+                    </div>
+
+                    <div class="filter-box">
+                        <select id="continentFilter">
+                            <option value="">Filtrar por continente</option>
+                            <option value="Africa">África</option>
+                            <option value="Americas">Américas</option>
+                            <option value="Asia">Ásia</option>
+                            <option value="Europe">Europa</option>
+                            <option value="Oceania">Oceania</option>
+                        </select>
+                    </div>
+
+                </div> 
+            </div> 
+        </section> 
+
+        <div id="loading" class="spinner hidden"></div>
+
+        <section id="countriesList" class="countries-grid"></section>
+    </main>
+
     <script src="js/script.js"></script>
 
 </body>
-
 </html>
