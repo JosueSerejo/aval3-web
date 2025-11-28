@@ -427,6 +427,11 @@ h1 {
 
 
 .main-footer {
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    display: flex;
+    flex-direction: column;
     background: var(--primary-color);
     color: var(--text-color);
     padding: var(--spacing-lg) 0;
@@ -462,7 +467,9 @@ h1 {
     display: block;
     padding: 0.2rem 0;
     transition: color 0.2s;
+    
 }
+
 
 .footer-col a:hover {
     color: var(--secondary-color);
@@ -476,6 +483,7 @@ h1 {
 
 .social-icons {
     display: flex;
+    justify-content: center;
     gap: var(--spacing-md);
 }
 
