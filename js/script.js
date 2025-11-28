@@ -3,6 +3,8 @@ const COUNTRIES_PER_PAGE = 8;
 let globalCountriesList = [];
 let currentPage = 1;
 
+const MIN_LOADING_TIME = 800; 
+
 document.addEventListener("DOMContentLoaded", () => {
     const menuToggle = document.getElementById("menuToggle");
     const mainNav = document.getElementById("mainNav");
@@ -48,11 +50,25 @@ function hideLoading() {
     document.getElementById("loading").classList.add("hidden");
 }
 
-async function fetchAllCountries() {
-    try {
-        showLoading();
+async function delayAndHideLoading() {
+    const startTime = Date.now();
+    const elapsedTime = Date.now() - startTime;
+    const remainingTime = MIN_LOADING_TIME - elapsedTime;
 
-        const response = await fetch(`https://restcountries.com/v3.1/all?fields=${essentialFields}`);
+    if (remainingTime > 0) {
+        await new Promise(resolve => setTimeout(resolve, remainingTime));
+    }
+    hideLoading();
+}
+
+async function fetchAllCountries() {
+    showLoading();
+    
+    const fetchPromise = fetch(`https://restcountries.com/v3.1/all?fields=${essentialFields}`);
+    const delayPromise = new Promise(resolve => setTimeout(resolve, MIN_LOADING_TIME));
+    
+    try {
+        const [response] = await Promise.all([fetchPromise, delayPromise]);
 
         if (!response.ok) {
             throw new Error(`Não foi possível carregar todos os países. Status: ${response.status}`);
@@ -62,12 +78,13 @@ async function fetchAllCountries() {
 
         if (Array.isArray(data) && data.length > 0) {
             globalCountriesList = data;
-            displayCountriesPage(1);
+            displayCountriesPage(1, false); 
         } else {
             throw new Error("A API retornou um formato inesperado ou lista vazia.");
         }
 
     } catch (error) {
+        await delayAndHideLoading();
         alert("Erro ao carregar países: " + error.message);
         document.getElementById("countriesList").innerHTML = "<p>Não foi possível carregar os dados dos países.</p>";
     } finally {
@@ -76,16 +93,20 @@ async function fetchAllCountries() {
 }
 
 async function searchCountry(name) {
+    showLoading();
+    
+    const fetchPromise = fetch(`https://restcountries.com/v3.1/name/${name}?fields=${essentialFields}`);
+    const delayPromise = new Promise(resolve => setTimeout(resolve, MIN_LOADING_TIME));
+    
     try {
-        showLoading();
-
-        const response = await fetch(`https://restcountries.com/v3.1/name/${name}?fields=${essentialFields}`);
-
+        const [response] = await Promise.all([fetchPromise, delayPromise]);
+        
         if (!response.ok) {
             if (response.status === 404) {
+                await delayAndHideLoading(); 
                 document.getElementById("countriesList").innerHTML = `
                     <p class="not-found-message">Nenhum país encontrado com o nome: <strong>${name}</strong>.</p>
-                 `;
+                `;
                 const paginationContainer = document.getElementById("pagination");
                 if (paginationContainer) paginationContainer.innerHTML = "";
                 return;
@@ -95,9 +116,10 @@ async function searchCountry(name) {
 
         const data = await response.json();
         globalCountriesList = data;
-        displayCountriesPage(1);
+        displayCountriesPage(1, false);
 
     } catch (error) {
+        await delayAndHideLoading();
         alert("Erro: " + error.message);
     } finally {
         hideLoading();
@@ -105,17 +127,20 @@ async function searchCountry(name) {
 }
 
 async function filterByContinent(continent) {
+    showLoading();
+
+    if (continent === "") {
+        fetchAllCountries();
+        return;
+    }
+    
+    const fetchPromise = fetch(
+        `https://restcountries.com/v3.1/region/${continent}?fields=${essentialFields}`
+    );
+    const delayPromise = new Promise(resolve => setTimeout(resolve, MIN_LOADING_TIME));
+    
     try {
-        showLoading();
-
-        if (continent === "") {
-            fetchAllCountries();
-            return;
-        }
-
-        const response = await fetch(
-            `https://restcountries.com/v3.1/region/${continent}?fields=${essentialFields}`
-        );
+        const [response] = await Promise.all([fetchPromise, delayPromise]);
 
         if (!response.ok) {
             throw new Error("Erro ao filtrar continente");
@@ -123,21 +148,27 @@ async function filterByContinent(continent) {
 
         const data = await response.json();
         globalCountriesList = data;
-        displayCountriesPage(1);
+        displayCountriesPage(1, false);
 
     } catch (error) {
+        await delayAndHideLoading();
         alert("Erro: " + error.message);
     } finally {
         hideLoading();
     }
 }
 
-function displayCountriesPage(page) {
+async function displayCountriesPage(page, applyDelay = true) {
     if (!globalCountriesList || globalCountriesList.length === 0) {
         renderCountries([]);
         return;
     }
 
+    if (applyDelay) {
+        showLoading();
+        await new Promise(resolve => setTimeout(resolve, MIN_LOADING_TIME));
+    }
+    
     currentPage = page;
     const startIndex = (currentPage - 1) * COUNTRIES_PER_PAGE;
     const endIndex = startIndex + COUNTRIES_PER_PAGE;
@@ -146,6 +177,7 @@ function displayCountriesPage(page) {
 
     renderCountries(countriesToRender);
     renderPaginationControls();
+    hideLoading();
 }
 
 function renderCountries(list) {
@@ -188,7 +220,7 @@ function renderPaginationControls() {
 
     let buttonsHTML = '';
 
-    buttonsHTML += `<button ${currentPage === 1 ? 'disabled' : ''} onclick="displayCountriesPage(${currentPage - 1})">Anterior</button>`;
+    buttonsHTML += `<button ${currentPage === 1 ? 'disabled' : ''} onclick="displayCountriesPage(${currentPage - 1}, true)">Anterior</button>`;
 
     const maxButtons = 5;
     let start = Math.max(1, currentPage - Math.floor(maxButtons / 2));
@@ -201,13 +233,13 @@ function renderPaginationControls() {
     for (let i = start; i <= end; i++) {
         buttonsHTML += `
             <button class="page-btn ${i === currentPage ? 'active' : ''}" 
-                    onclick="displayCountriesPage(${i})">
+                    onclick="displayCountriesPage(${i}, true)">
                 ${i}
             </button>
         `;
     }
 
-    buttonsHTML += `<button ${currentPage === totalPages ? 'disabled' : ''} onclick="displayCountriesPage(${currentPage + 1})">Próxima</button>`;
+    buttonsHTML += `<button ${currentPage === totalPages ? 'disabled' : ''} onclick="displayCountriesPage(${currentPage + 1}, true)">Próxima</button>`;
 
     paginationContainer.innerHTML = buttonsHTML;
 }
