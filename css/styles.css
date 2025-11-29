@@ -425,7 +425,6 @@ h1 {
     }
 }
 
-
 .main-footer {
     align-items: center;
     justify-content: center;
@@ -467,7 +466,7 @@ h1 {
     display: block;
     padding: 0.2rem 0;
     transition: color 0.2s;
-    
+
 }
 
 
@@ -543,4 +542,129 @@ h1 {
     .social-icons a {
         font-size: 1rem;
     }
+}
+
+.modal {
+    position: fixed;
+    z-index: 1000;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    overflow: auto;
+    background-color: rgba(0, 0, 0, 0.8);
+    backdrop-filter: blur(5px);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 20px;
+}
+
+.modal.hidden {
+    display: none;
+}
+
+.modal-content {
+    background-color: #1a1a1a;
+    color: var(--text-color);
+    padding: 30px;
+    border-radius: 10px;
+    width: 90%;
+    max-width: 700px;
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.5);
+    position: relative;
+    max-height: 90vh;
+    overflow-y: auto;
+    animation: fadeIn 0.3s ease-out;
+}
+
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+        transform: translateY(-20px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.close-btn {
+    color: var(--secondary-color);
+    float: right;
+    font-size: 28px;
+    font-weight: bold;
+    cursor: pointer;
+    transition: color 0.2s;
+}
+
+.close-btn:hover,
+.close-btn:focus {
+    color: #ffeba3;
+}
+
+.modal-header {
+    display: flex;
+    align-items: center;
+    margin-bottom: 1.5rem;
+    padding-bottom: 0.5rem;
+    border-bottom: 1px solid #333;
+}
+
+#modalFlag {
+    width: 60px;
+    height: auto;
+    margin-right: 15px;
+    border: 1px solid #444;
+    border-radius: 4px;
+}
+
+#modalName {
+    color: var(--secondary-color);
+    margin: 0;
+    font-size: 1.8rem;
+}
+
+.modal-body p {
+    margin-bottom: 0.75rem;
+    line-height: 1.5;
+}
+
+.modal-body strong {
+    color: var(--secondary-color);
+}
+
+.modal-section {
+    margin-top: 1.5rem;
+    padding-top: 1rem;
+    border-top: 1px solid #333;
+}
+
+.modal-section h4 {
+    color: var(--secondary-color);
+    margin-bottom: 0.8rem;
+    font-size: 1.2rem;
+}
+
+#modalMapEmbed {
+    height: 300px;
+    border-radius: 6px;
+    overflow: hidden;
+}
+
+#modalMapEmbed iframe {
+    width: 100%;
+    height: 100%;
+    border: none;
+}
+
+#modalDetails {
+    display: block;
+}
+
+#countryModal #modalLoading {
+    margin: 20px auto;
+    width: 40px;
+    height: 40px;
 }

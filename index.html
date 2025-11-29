@@ -104,7 +104,36 @@
         </div>
     </footer>
 
-
+    <div id="countryModal" class="modal hidden">
+        <div class="modal-content">
+            <span class="close-btn">&times;</span>
+            <div id="modalDetails">
+                <div class="modal-header">
+                    <img id="modalFlag" src="" alt="Bandeira">
+                    <h2 id="modalName">Nome do País</h2>
+                </div>
+                <div class="modal-body">
+                    <p><strong>Nome Oficial:</strong> <span id="modalOfficialName"></span></p>
+                    <p><strong>Área:</strong> <span id="modalArea"></span></p>
+                    <p><strong>População:</strong> <span id="modalPopulation"></span></p>
+                    <p><strong>Capital:</strong> <span id="modalCapital"></span></p>
+                    <p><strong>Região:</strong> <span id="modalRegion"></span></p>
+                    <p><strong>Idiomas:</strong> <span id="modalLanguages"></span></p>
+                    <p><strong>Moedas:</strong> <span id="modalCurrencies"></span></p>
+                    <p><strong>Domínio de Internet:</strong> <span id="modalTld"></span></p>
+                    <div id="modalBordersContainer" class="modal-section hidden">
+                        <h4>Países Fronteiriços:</h4>
+                        <p id="modalBorders"></p>
+                    </div>
+                    <div id="modalMapContainer" class="modal-section">
+                        <h4>Mapa:</h4>
+                        <div id="modalMapEmbed"></div>
+                    </div>
+                </div>
+            </div>
+            <div id="modalLoading" class="spinner hidden"></div>
+        </div>
+    </div>
     <script src="js/script.js"></script>
 
 </body>
