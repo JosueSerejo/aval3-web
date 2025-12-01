@@ -76,19 +76,13 @@ function showLoading(containerId = "loading") {
         if (countriesListEl) countriesListEl.innerHTML = "";
         const paginationContainer = document.getElementById("pagination");
         if (paginationContainer) paginationContainer.innerHTML = "";
-    } else if (containerId === "modalLoading") {
-        const md = document.getElementById("modalDetails");
-        if (md) md.classList.add("hidden");
     }
 }
 
 function hideLoading(containerId = "loading") {
     const el = document.getElementById(containerId);
     if (el) el.classList.add("hidden");
-    if (containerId === "modalLoading") {
-        const md = document.getElementById("modalDetails");
-        if (md) md.classList.remove("hidden");
-    }
+
 }
 
 async function delayAndHideLoading(containerId = "loading") {
