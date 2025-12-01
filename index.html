@@ -4,8 +4,8 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="css/styles.css">
     <title>Countree</title>
+    <link rel="stylesheet" href="css/styles.css">
 </head>
 
 <body>
@@ -52,13 +52,39 @@
                             <option value="Oceania">Oceania</option>
                         </select>
                     </div>
+
+                    <button id="favoritesBtn" class="favorites-btn" aria-pressed="false">
+                        <span class="fav-icon" aria-hidden="true">★</span>
+                        Favoritos
+                    </button>
                 </div>
             </div>
         </section>
 
         <div id="loading" class="spinner hidden"></div>
 
-        <section id="countriesList" class="countries-grid"></section>
+        <section id="countriesList" class="countries-grid">
+            <div class="country-card">
+                <img src="https://flagcdn.com/br.svg" alt="Bandeira do Brasil">
+                <h3>Brasil</h3>
+                <p><strong>População:</strong> 214,3 milhões</p>
+                <p><strong>Região:</strong> Américas</p>
+                <p><strong>Capital:</strong> Brasília</p>
+                <button class="fav-btn" data-country-code="BRA">
+                    <span class="fav-icon-in-card" aria-hidden="true">★</span> Favoritar
+                </button>
+            </div>
+            <div class="country-card">
+                <img src="https://flagcdn.com/jp.svg" alt="Bandeira do Japão">
+                <h3>Japão</h3>
+                <p><strong>População:</strong> 125,7 milhões</p>
+                <p><strong>Região:</strong> Ásia</p>
+                <p><strong>Capital:</strong> Tóquio</p>
+                <button class="fav-btn saved" data-country-code="JPN">
+                    <span class="fav-icon-in-card" aria-hidden="true">★</span> Favoritado
+                </button>
+            </div>
+        </section>
 
         <div class="pagination-container" id="pagination">
         </div>
@@ -134,6 +160,7 @@
             <div id="modalLoading" class="spinner hidden"></div>
         </div>
     </div>
+
     <script src="js/script.js"></script>
 
 </body>

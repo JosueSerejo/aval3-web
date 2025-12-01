@@ -5,11 +5,18 @@ let currentPage = 1;
 
 const MIN_LOADING_TIME = 800;
 
+let isFavoritesFilterActive = false;
+
+let previousCountriesList = [];
+
+let favoriteCountries = JSON.parse(localStorage.getItem("favorites")) || [];
+
 document.addEventListener("DOMContentLoaded", () => {
     const menuToggle = document.getElementById("menuToggle");
     const mainNav = document.getElementById("mainNav");
     const countryModal = document.getElementById("countryModal");
     const closeBtn = countryModal.querySelector(".close-btn");
+    const favoritesBtn = document.getElementById("favoritesBtn");
 
     menuToggle.addEventListener("click", () => {
         mainNav.classList.toggle("menu-open");
@@ -18,6 +25,8 @@ document.addEventListener("DOMContentLoaded", () => {
 
     document.getElementById("searchBtn").addEventListener("click", () => {
         const name = document.getElementById("searchInput").value.trim();
+
+        deactivateFavoritesFilter();
 
         if (name === "") {
             fetchAllCountries();
@@ -33,6 +42,7 @@ document.addEventListener("DOMContentLoaded", () => {
     });
 
     document.getElementById("continentFilter").addEventListener("change", e => {
+        deactivateFavoritesFilter();
         filterByContinent(e.target.value);
     });
 
@@ -46,40 +56,47 @@ document.addEventListener("DOMContentLoaded", () => {
         }
     });
 
+    favoritesBtn.addEventListener("click", async () => {
+        if (isFavoritesFilterActive) {
+            deactivateFavoritesFilter();
+            restorePreviousList();
+        } else {
+            await activateFavoritesFilter();
+        }
+    });
+
     fetchAllCountries();
 });
 
 function showLoading(containerId = "loading") {
-    document.getElementById(containerId).classList.remove("hidden");
+    const el = document.getElementById(containerId);
+    if (el) el.classList.remove("hidden");
     if (containerId === "loading") {
-        document.getElementById("countriesList").innerHTML = "";
+        const countriesListEl = document.getElementById("countriesList");
+        if (countriesListEl) countriesListEl.innerHTML = "";
         const paginationContainer = document.getElementById("pagination");
-        if (paginationContainer) {
-            paginationContainer.innerHTML = "";
-        }
+        if (paginationContainer) paginationContainer.innerHTML = "";
     } else if (containerId === "modalLoading") {
-        document.getElementById("modalDetails").classList.add("hidden");
+        const md = document.getElementById("modalDetails");
+        if (md) md.classList.add("hidden");
     }
 }
 
 function hideLoading(containerId = "loading") {
-    document.getElementById(containerId).classList.add("hidden");
+    const el = document.getElementById(containerId);
+    if (el) el.classList.add("hidden");
     if (containerId === "modalLoading") {
-        document.getElementById("modalDetails").classList.remove("hidden");
+        const md = document.getElementById("modalDetails");
+        if (md) md.classList.remove("hidden");
     }
 }
 
 async function delayAndHideLoading(containerId = "loading") {
-    const startTime = Date.now();
-    const elapsedTime = Date.now() - startTime;
-    const remainingTime = MIN_LOADING_TIME - elapsedTime;
-
-    if (remainingTime > 0) {
-        await new Promise(resolve => setTimeout(resolve, remainingTime));
-    }
+    await new Promise(resolve => setTimeout(resolve, MIN_LOADING_TIME));
     hideLoading(containerId);
 }
 
+// ================== FETCHS ===================
 async function fetchAllCountries() {
     showLoading();
 
@@ -96,7 +113,11 @@ async function fetchAllCountries() {
         const data = await response.json();
 
         if (Array.isArray(data) && data.length > 0) {
-            globalCountriesList = data;
+            const sortedList = data.sort((a, b) => a.name.common.localeCompare(b.name.common));
+
+            previousCountriesList = sortedList;
+            globalCountriesList = sortedList;
+
             displayCountriesPage(1, false);
         } else {
             throw new Error("A API retornou um formato inesperado ou lista vazia.");
@@ -114,7 +135,7 @@ async function fetchAllCountries() {
 async function searchCountry(name) {
     showLoading();
 
-    const fetchPromise = fetch(`https://restcountries.com/v3.1/name/${name}?fields=${essentialFields}`);
+    const fetchPromise = fetch(`https://restcountries.com/v3.1/name/${encodeURIComponent(name)}?fields=${essentialFields}`);
     const delayPromise = new Promise(resolve => setTimeout(resolve, MIN_LOADING_TIME));
 
     try {
@@ -128,12 +149,15 @@ async function searchCountry(name) {
                 `;
                 const paginationContainer = document.getElementById("pagination");
                 if (paginationContainer) paginationContainer.innerHTML = "";
+                previousCountriesList = [];
+                globalCountriesList = [];
                 return;
             }
             throw new Error(`Erro na busca. Status: ${response.status}`);
         }
 
         const data = await response.json();
+        previousCountriesList = data;
         globalCountriesList = data;
         displayCountriesPage(1, false);
 
@@ -166,6 +190,7 @@ async function filterByContinent(continent) {
         }
 
         const data = await response.json();
+        previousCountriesList = data;
         globalCountriesList = data;
         displayCountriesPage(1, false);
 
@@ -213,25 +238,53 @@ function renderCountries(list) {
     list.forEach(country => {
         const flagSrc = country.flags.svg || country.flags.png;
 
-        const card = `
-            <div class="country-card" data-country-code="${country.cca3}">
-                <img src="${flagSrc}" alt="Bandeira de ${country.name.common}">
-                <h3>${country.name.common}</h3>
-                <p><strong>Capital:</strong> ${country.capital?.[0] || "N/A"}</p>
-                <p><strong>Região:</strong> ${country.region || "N/A"}</p>
-                <p><strong>População:</strong> ${country.population?.toLocaleString() || "N/A"}</p>
-            </div>
-        `;
-        container.innerHTML += card;
-    });
+        const isFav = favoriteCountries.includes(country.cca3);
 
-    document.querySelectorAll(".country-card").forEach(card => {
+        const card = document.createElement("div");
+        card.className = "country-card";
+        card.setAttribute("data-country-code", country.cca3);
+        card.innerHTML = `
+            <img src="${flagSrc}" alt="Bandeira de ${country.name.common}">
+            <h3>${country.name.common}</h3>
+            <p><strong>Capital:</strong> ${country.capital?.[0] || "N/A"}</p>
+            <p><strong>Região:</strong> ${country.region || "N/A"}</p>
+            <p><strong>População:</strong> ${country.population?.toLocaleString() || "N/A"}</p>
+            <button class="fav-btn ${isFav ? 'saved' : ''}" data-code="${country.cca3}">
+                <span class="fav-icon-in-card" aria-hidden="true">★</span> ${isFav ? "Favoritado" : "Favoritar"}
+            </button>
+        `;
+
+        // abrir modal ao clicar no card (exceto no botão favorito)
         card.addEventListener("click", (e) => {
+            if (e.target.closest(".fav-btn")) return;
             const countryCode = e.currentTarget.getAttribute("data-country-code");
             if (countryCode) {
                 showCountryDetails(countryCode);
             }
         });
+
+        // evento do botão favoritar
+        card.querySelectorAll(".fav-btn").forEach(btn => {
+            btn.addEventListener("click", (e) => {
+                e.stopPropagation();
+                const code = btn.getAttribute("data-code");
+                toggleFavorite(code);
+
+                // atualizar aparência do botão
+                const nowFav = favoriteCountries.includes(code);
+                const icon = btn.querySelector('.fav-icon-in-card');
+
+                btn.classList.toggle("saved", nowFav);
+
+                btn.lastChild.textContent = nowFav ? " Favoritado" : " Favoritar";
+
+                if (!nowFav && isFavoritesFilterActive) {
+                    activateFavoritesFilter(false);
+                }
+            });
+        });
+
+        container.appendChild(card);
     });
 }
 
@@ -294,7 +347,7 @@ async function showCountryDetails(code) {
         }
 
         const data = await response.json();
-        renderModalDetails(data);
+        renderModalDetails(data[0] || data);
 
     } catch (error) {
         alert("Erro ao carregar detalhes: " + error.message);
@@ -305,7 +358,11 @@ async function showCountryDetails(code) {
 }
 
 function renderModalDetails(country) {
-    const formatValue = (value, unit = "") => value !== undefined ? `${value.toLocaleString()} ${unit}`.trim() : "N/A";
+    const formatValue = (value, unit = "") => {
+        if (value === undefined || value === null) return "N/A";
+        if (typeof value === "number") return `${value.toLocaleString()} ${unit}`.trim();
+        return `${value} ${unit}`.trim();
+    };
 
     document.getElementById("modalName").textContent = country.name.common;
     document.getElementById("modalFlag").src = country.flags.svg || country.flags.png;
@@ -358,3 +415,68 @@ function renderModalDetails(country) {
         mapContainer.innerHTML = "<p>Coordenadas do mapa não disponíveis.</p>";
     }
 }
+
+function updateFavoritesButtonState(isActive) {
+    const btn = document.getElementById("favoritesBtn");
+    btn.setAttribute("aria-pressed", isActive);
+    btn.classList.toggle("active", isActive);
+}
+
+async function activateFavoritesFilter(shouldSavePrevious = true) {
+    if (!previousCountriesList || previousCountriesList.length === 0) {
+        await fetchAllCountries();
+    }
+
+    if (shouldSavePrevious) {
+        previousCountriesList = globalCountriesList;
+    }
+
+    const favList = previousCountriesList.filter(c => favoriteCountries.includes(c.cca3));
+
+    if (favList.length === 0) {
+        alert("Nenhum país favoritado ainda!");
+        updateFavoritesButtonState(false);
+        isFavoritesFilterActive = false;
+        return;
+    }
+
+    isFavoritesFilterActive = true;
+    updateFavoritesButtonState(true);
+
+    globalCountriesList = favList;
+    displayCountriesPage(1, true);
+}
+
+function deactivateFavoritesFilter() {
+    isFavoritesFilterActive = false;
+    updateFavoritesButtonState(false);
+}
+
+function restorePreviousList() {
+    if (previousCountriesList.length === 0) {
+        fetchAllCountries();
+        return;
+    }
+    globalCountriesList = previousCountriesList;
+    displayCountriesPage(1, true);
+}
+
+function saveFavoritesToLocalStorage() {
+    localStorage.setItem("favorites", JSON.stringify(favoriteCountries));
+}
+
+function toggleFavorite(code) {
+    if (!code) return;
+    if (favoriteCountries.includes(code)) {
+        favoriteCountries = favoriteCountries.filter(c => c !== code);
+    } else {
+        favoriteCountries.push(code);
+    }
+    saveFavoritesToLocalStorage();
+}
+
+document.querySelectorAll(".close-btn").forEach(btn => {
+    btn.addEventListener("click", () => {
+        document.getElementById("countryModal").classList.add("hidden");
+    });
+});
