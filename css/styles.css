@@ -219,7 +219,7 @@ ul {
 }
 
 .input-wrapper {
-    position: relative; 
+    position: relative;
     display: inline-block;
     flex: 1 1 auto;
     width: 100%;
@@ -256,11 +256,11 @@ ul {
 #clearSearchBtn {
     position: absolute;
     top: 50%;
-    right: 5px; 
+    right: 5px;
     transform: translateY(-50%);
     background: none;
     border: none;
-    color: var(--primary-color); 
+    color: var(--primary-color);
     cursor: pointer;
     font-size: 16px;
     padding: 0 5px;
@@ -273,7 +273,7 @@ ul {
 
 #clearSearchBtn:not(.hidden) {
     display: flex;
-    align-items: center; 
+    align-items: center;
     justify-content: center;
 }
 
@@ -790,9 +790,21 @@ ul {
     color: #f4f4f4;
 }
 
+.about-card h2 {
+    text-align: center;
+    margin-bottom: 20px;
+    color: var(--secondary-color);
+}
+
+.about-card p {
+    margin-bottom: 20px;
+    text-align: justify;
+    line-height: 30px;
+}
+
 .team-members {
     display: flex;
-    justify-content: space-around;
+    justify-content: center;
     flex-wrap: wrap;
     gap: 20px;
 }
@@ -825,6 +837,7 @@ ul {
     .menu-toggle-label {
         display: none;
     }
+
     .main-nav {
         background: transparent;
         display: block;
@@ -833,58 +846,72 @@ ul {
         position: static;
         width: auto;
     }
+
     .main-nav.menu-open {
         display: block !important;
         position: static !important;
     }
+
     .nav-list {
         align-items: center;
         flex-direction: row;
         gap: 0;
         padding: 0;
     }
+
     .nav-item {
         margin-left: var(--spacing-md);
     }
+
     .nav-link {
         font-size: 1rem;
         padding: var(--spacing-xs) var(--spacing-sm);
         width: auto;
     }
+
     .nav-link:hover {
         background: transparent;
         color: var(--secondary-color);
     }
+
     .nav-link::after {
         bottom: -4px;
         left: 50%;
         transform: translateX(-50%);
     }
+
     .nav-link:hover::after {
         width: 100%;
     }
+
     .nav-link.current::after {
         bottom: -4px;
     }
+
     .search-filter-row {
         align-items: center;
         flex-direction: row;
         gap: 0.6rem;
         justify-content: center;
     }
+
     .search-box {
         flex: 1 1 500px;
     }
+
     .input-wrapper {
         flex: 1 1 auto;
         width: 100%;
     }
+
     .search-box input {
         width: 100%;
     }
+
     .filter-box {
         flex: 0 0 220px;
     }
+
     .countries-grid {
         grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
         justify-content: center;
@@ -892,68 +919,88 @@ ul {
         margin-right: auto;
         width: 100%;
     }
+
     .country-card {
         justify-self: stretch;
     }
+
     .pagination-container button {
         font-size: 1rem;
         padding: 0.5rem 1rem;
     }
+
     .footer-columns {
         flex-direction: row;
         justify-content: space-between;
         text-align: left;
         gap: var(--spacing-lg);
     }
+
     .footer-col {
         flex: 1;
         min-width: 180px;
     }
+
     .footer-left {
         flex: 1;
         display: flex;
         flex-direction: column;
         gap: var(--spacing-lg);
     }
+
     .developers-section {
         text-align: left;
     }
+
     .social-section {
         margin-top: 0;
         text-align: left;
     }
+
     .social-icons {
         justify-content: flex-start;
     }
+
     .legal-col {
         flex: 1;
         text-align: left;
     }
+
     .footer-right {
         flex: 1;
         text-align: left;
         margin: 0;
         max-width: 300px;
     }
+
     .author-links-col1 a {
         text-align: left;
     }
+
+    .team-members {
+        gap: 100px;
+    }
+
 }
+
 @media (min-width: 1024px) {
     .container {
         width: 92%;
     }
 }
+
 @keyframes spin {
     to {
         transform: rotate(360deg);
     }
 }
+
 @keyframes fadeIn {
     from {
         opacity: 0;
         transform: translateY(-20px);
     }
+
     to {
         opacity: 1;
         transform: translateY(0);
