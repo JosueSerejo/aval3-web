@@ -1,5 +1,5 @@
-import { UIManager } from '../ui/UIManager.js'; 
-import { CountryService } from './CountryService.js'; 
+import { UIManager } from '../ui/UIManager.js';
+import { CountryService } from './CountryService.js';
 import { FavoritesManager } from './FavoritesManager.js';
 
 export class CountryExplorerApp {
@@ -19,7 +19,7 @@ export class CountryExplorerApp {
     }
 
     _setupEventListeners() {
-        
+
         const countryModal = document.getElementById("countryModal");
         const closeBtn = countryModal.querySelector(".close-btn");
         const favoritesBtn = document.getElementById("favoritesBtn");
@@ -27,17 +27,17 @@ export class CountryExplorerApp {
         document.getElementById("searchBtn").addEventListener("click", async () => {
             const inputElement = document.getElementById("searchInput");
             const name = inputElement.value.trim();
-            
+
             this.deactivateFavoritesFilter();
 
             if (!name) {
-                alert("Por favor, digite o nome de um país para buscar.");
+                this.ui.showToast("Por favor, digite o nome de um país para buscar.", 'warning');
                 this.ui.hideSearchClearButton();
                 return;
             }
-            
-            this.ui.showSearchClearButton(inputElement); 
-            
+
+            this.ui.showSearchClearButton(inputElement);
+
             await this.searchCountry(name);
         });
 
@@ -67,14 +67,14 @@ export class CountryExplorerApp {
     async _loadAndRender(loadDataFn) {
         this.ui.showLoading();
         try {
-            const data = await loadDataFn(); 
+            const data = await loadDataFn();
             this.globalCountriesList = data.sort((a, b) => a.name.common.localeCompare(b.name.common));
             this.previousCountriesList = [...this.globalCountriesList];
             await this.ui.displayCountriesPage(this.globalCountriesList, 1);
         } catch (err) {
-            alert("Erro: " + err.message);
+            this.ui.showToast(err.message, 'error');
         } finally {
-            this.ui.hideLoading(); 
+            this.ui.hideLoading();
         }
     }
 
@@ -99,7 +99,7 @@ export class CountryExplorerApp {
             const data = await this.service.getCountryDetails(code);
             this.ui.renderModalDetails(data[0] || data);
         } catch (err) {
-            alert("Erro ao carregar detalhes: " + err.message);
+            this.ui.showToast("Erro ao carregar detalhes: " + err.message, 'error');
             modal.classList.add("hidden");
         } finally {
             this.ui.hideLoading("modalLoading");
@@ -108,23 +108,32 @@ export class CountryExplorerApp {
 
     async activateFavoritesFilter(shouldSavePrevious = true) {
         if (!this.previousCountriesList || this.previousCountriesList.length === 0) {
-            await this.fetchAllCountries(); 
+            await this.fetchAllCountries();
             return;
         }
-        
+
         if (shouldSavePrevious) this.previousCountriesList = [...this.globalCountriesList];
 
         const favList = this.favoritesManager.filterFavorites(this.previousCountriesList);
-        
+
         if (favList.length === 0) {
-            alert("Nenhum país favoritado ainda!");
+            const continentFilter = document.getElementById("continentFilter");
+            const selectedContinent = continentFilter ? continentFilter.value : '';
+
+            let message = "Nenhum país favoritado ainda!";
+
+            if (selectedContinent) {
+                message = `Eita, você ainda não tem país favorito no continente: ${selectedContinent}.`;
+            }
+
+            this.ui.showToast(message, 'warning');
             this.isFavoritesFilterActive = false;
             return;
         }
 
         this.isFavoritesFilterActive = true;
         this.globalCountriesList = favList;
-        
+
         await this.ui.displayCountriesPage(this.globalCountriesList, 1);
     }
 

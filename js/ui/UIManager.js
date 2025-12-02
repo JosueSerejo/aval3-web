@@ -1,4 +1,4 @@
-import { UIRenderer } from "./UIRenderer.js";
+import { UIRenderer } from './UIRenderer.js';
 import { ModalRenderer } from './ModalRenderer.js';
 
 export class UIManager {
@@ -11,6 +11,30 @@ export class UIManager {
 
         this.COUNTRIES_PER_PAGE = this.uiRenderer.COUNTRIES_PER_PAGE;
         this.currentPage = this.uiRenderer.currentPage;
+    }
+
+    showToast(message, type = 'error', duration = 4000) {
+        const container = document.getElementById("appMessages");
+        if (!container) return;
+
+        const toast = document.createElement("div");
+        toast.className = `toast ${type}`;
+        
+        const title = type === 'error' ? "Erro:" : (type === 'warning' ? "Atenção:" : "Informação:");
+        toast.innerHTML = `<strong>${title}</strong> ${message}`;
+
+        container.appendChild(toast);
+
+        setTimeout(() => {
+            toast.classList.add('show');
+        }, 10); 
+
+        setTimeout(() => {
+            toast.classList.remove('show');
+            setTimeout(() => {
+                container.removeChild(toast);
+            }, 500);
+        }, duration);
     }
 
     showLoading(containerId = "loading") {
@@ -63,7 +87,7 @@ export class UIManager {
             clearBtn.classList.remove("hidden");
             
             clearBtn.onclick = async () => {
-                inputElement.value = ''; 
+                inputElement.value = '';
                 this.hideSearchClearButton();
                 this.app.deactivateFavoritesFilter(); 
                 await this.app.fetchAllCountries();

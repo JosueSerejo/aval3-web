@@ -260,7 +260,7 @@ ul {
     transform: translateY(-50%);
     background: none;
     border: none;
-    color: var(--primary-color);
+    color: var(--light-text-color);
     cursor: pointer;
     font-size: 16px;
     padding: 0 5px;
@@ -775,9 +775,6 @@ ul {
     transform: translateY(-2px);
 }
 
-
-/* sobre */
-
 .about-card {
     background: #464545;
     border-radius: 12px;
@@ -832,6 +829,48 @@ ul {
     color: #777;
 }
 
+.app-messages-container {
+    position: fixed;
+    top: 20px;
+    left: 50%;
+    transform: translateX(-50%);
+    z-index: 1000;
+    width: 90%;
+    max-width: 350px;
+}
+
+.toast {
+    background-color: #333;
+    color: var(--light-text-color);
+    padding: 15px;
+    margin-bottom: 10px;
+    border-radius: 8px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.4);
+    opacity: 0;
+    transition: opacity 0.5s, transform 0.5s;
+    transform: translateY(-20px);
+}
+
+.toast.show {
+    opacity: 1;
+    transform: translateY(0);
+}
+
+.toast.error {
+    background-color: #dc3545;
+    border-left: 5px solid var(--secondary-color);
+}
+
+.toast.warning {
+    background-color: #ffc107;
+    color: var(--primary-color);
+    border-left: 5px solid #dc3545;
+}
+
+.toast strong {
+    font-weight: bold;
+    margin-right: 5px;
+}
 
 @media (min-width: 768px) {
     .menu-toggle-label {

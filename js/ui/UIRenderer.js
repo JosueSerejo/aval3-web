@@ -4,7 +4,7 @@ export class UIRenderer {
         this.COUNTRIES_PER_PAGE = COUNTRIES_PER_PAGE;
         this.currentPage = 1;
     }
-    
+
     renderCountries(list) {
         const container = document.getElementById("countriesList");
         container.innerHTML = "";
@@ -19,12 +19,14 @@ export class UIRenderer {
             const flagSrc = country.flags.svg || country.flags.png;
             const isFav = this.app.favoritesManager.isFavorite(country.cca3);
 
+            const displayCountryName = country.name.common;
+
             const card = document.createElement("div");
             card.className = "country-card";
             card.setAttribute("data-country-code", country.cca3);
             card.innerHTML = `
                 <img src="${flagSrc}" alt="Bandeira de ${country.name.common}">
-                <h3>${country.name.common}</h3>
+                <h3>${displayCountryName}</h3>
                 <p><strong>Capital:</strong> ${country.capital?.[0] || "N/A"}</p>
                 <p><strong>Região:</strong> ${country.region || "N/A"}</p>
                 <p><strong>População:</strong> ${country.population?.toLocaleString() || "N/A"}</p>

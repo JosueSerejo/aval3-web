@@ -28,7 +28,15 @@ export class CountryService {
 
         try {
             const [response] = await Promise.all([fetchPromise, delayPromise]); 
-            if (!response.ok) throw new Error(`Erro na API. Status: ${response.status}`);
+            
+            if (response.status === 404 && url.includes('name/')) {
+                throw new Error("Vish, não encontramos este país.");
+            }
+
+            if (!response.ok) {
+                throw new Error(`Erro na API. Status: ${response.status}`);
+            }
+            
             const data = await response.json();
             return data;
         } catch (error) {
