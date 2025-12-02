@@ -14,8 +14,6 @@
     --header-height-mobile: 60px;
 }
 
-
-
 * {
     margin: 0;
     padding: 0;
@@ -60,23 +58,6 @@ ul {
     position: sticky;
     top: 0;
     z-index: 100;
-}
-
-.main-footer {
-    align-items: center;
-    background-color: rgba(66, 72, 21, 0.75);
-    background-blend-mode: multiply;
-    background-image: url("../img/bg/bg-footer.png");
-    background-position: center center;
-    background-repeat: no-repeat;
-    background-size: cover;
-    color: var(--text-color);
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    margin-top: var(--spacing-lg);
-    padding: var(--spacing-lg) 0;
-    text-align: center;
 }
 
 .nav-container {
@@ -359,6 +340,23 @@ ul {
     font-weight: bold;
 }
 
+.main-footer {
+    align-items: center;
+    background-color: rgba(66, 72, 21, 0.75);
+    background-blend-mode: multiply;
+    background-image: url("../img/bg/bg-footer.png");
+    background-position: center center;
+    background-repeat: no-repeat;
+    background-size: cover;
+    color: var(--text-color);
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    margin-top: var(--spacing-lg);
+    padding: var(--spacing-lg) 0;
+    text-align: center;
+}
+
 .footer-content {
     display: flex;
     flex-direction: column;
@@ -511,7 +509,6 @@ ul {
     white-space: nowrap;
     border-width: 0;
 }
-
 
 .modal {
     align-items: center;
@@ -802,7 +799,7 @@ ul {
     }
 
     .search-box {
-        flex: 0 0 500px;
+        flex: 1 1 500px;
     }
 
     .search-box input {
@@ -814,16 +811,15 @@ ul {
     }
 
     .countries-grid {
-        grid-template-columns: repeat(auto-fill, 282px);
-        justify-content: start;
+        grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+        justify-content: center;
         margin-left: auto;
         margin-right: auto;
         width: 100%;
     }
 
     .country-card {
-        justify-self: start;
-        max-width: 282px;
+        justify-self: stretch;
     }
 
     .pagination-container button {
