@@ -9,6 +9,7 @@
 </head>
 
 <body>
+    <div id="body"></div>
     <header class="main-header">
         <div class="container nav-container">
             <a href="index.html" class="logo">
@@ -23,9 +24,9 @@
 
             <nav class="main-nav" id="mainNav">
                 <ul class="nav-list">
-                    <li class="nav-item"><a href="index.html" class="nav-link">Início</a></li>
-                    <li class="nav-item"><a href="sobre.html" class="nav-link current">Sobre</a></li>
-                    <li class="nav-item"><a href="#" class="nav-link">Contato</a></li>
+                    <li class="nav-item"><a href="index.html" class="nav-link current">Início</a></li>
+                    <li class="nav-item"><a href="sobre.html" class="nav-link">Sobre</a></li>
+                    <li class="nav-item"><a href="#contactUs" class="nav-link">Contato</a></li>
                 </ul>
             </nav>
         </div>
@@ -42,21 +43,26 @@
 
 
 
-
-
-
-
-
-    </main>
     <footer class="main-footer">
         <div class="container footer-content">
             <div class="footer-columns">
 
-                <div class="footer-col description-col">
-                    <h4>Desenvolvido por:</h4>
-                    <div class="author-links-col1">
-                        <a href="https://github.com/Adoniaslll" target="_blank">Adonias Pereira dos Santos Terceiro</a>
-                        <a href="https://github.com/JosueSerejo" target="_blank">Willamy Josué Santos Serejo</a>
+                <div class="footer-col footer-left">
+                    <div class="developers-section">
+                        <h4>Desenvolvido por:</h4>
+                        <div class="author-links-col1">
+                            <a href="https://github.com/Adoniaslll" target="_blank">Adonias Pereira dos Santos
+                                Terceiro</a>
+                            <a href="https://github.com/JosueSerejo" target="_blank">Willamy Josué Santos Serejo</a>
+                        </div>
+                    </div>
+                    <div class="social-section">
+                        <h4>Siga a Countree</h4>
+                        <div class="social-icons">
+                            <a href="#" aria-label="Instagram" target="_blank">IG</a>
+                            <a href="#" aria-label="Twitter" target="_blank">X</a>
+                            <a href="#" aria-label="Facebook" target="_blank">FB</a>
+                        </div>
                     </div>
                 </div>
 
@@ -69,13 +75,19 @@
                     </ul>
                 </div>
 
-                <div class="footer-col social-col">
-                    <h4>Siga a Countree</h4>
-                    <div class="social-icons">
-                        <a href="#" aria-label="Instagram" target="_blank">IG</a>
-                        <a href="#" aria-label="Twitter" target="_blank">X</a>
-                        <a href="#" aria-label="Facebook" target="_blank">FB</a>
-                    </div>
+                <div class="footer-col footer-right">
+                    <h4 id="contactUs">Fale Conosco</h4>
+                    <form class="contact-form">
+                        <div class="form-group">
+                            <label for="contactName" class="visually-hidden">Seu Nome</label>
+                            <input type="text" id="contactName" placeholder="Seu Nome" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="contactMessage" class="visually-hidden">Mensagem</label>
+                            <textarea id="contactMessage" placeholder="Sua Mensagem" rows="4" required></textarea>
+                        </div>
+                        <button type="submit" class="submit-btn">Enviar Mensagem</button>
+                    </form>
                 </div>
             </div>
 
@@ -87,8 +99,12 @@
         </div>
     </footer>
 
+    <a href="#body" id="scrollToTopBtn" class="scroll-to-top" aria-label="Voltar ao topo da página">
+        <span class="arrow-icon">&#9650;</span>
+    </a>
 
-    <script src="js/script.js"></script>
+    <script src="./js/menu.js" type="module"></script>
+    <script src="./js/main.js" type="module"></script>
 
 </body>
 

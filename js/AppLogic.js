@@ -83,17 +83,11 @@ export class CountryExplorerApp {
         await this.fetchAllCountries();
     }
 
-    _setupEventListeners() {
-        const menuToggle = document.getElementById("menuToggle");
-        const mainNav = document.getElementById("mainNav");
+    _setupEventListeners() {d("mainNav");
+        
         const countryModal = document.getElementById("countryModal");
         const closeBtn = countryModal.querySelector(".close-btn");
         const favoritesBtn = document.getElementById("favoritesBtn");
-
-        menuToggle.addEventListener("click", () => {
-            mainNav.classList.toggle("menu-open");
-            menuToggle.classList.toggle("open");
-        });
 
         document.getElementById("searchBtn").addEventListener("click", async () => {
             const name = document.getElementById("searchInput").value.trim();
