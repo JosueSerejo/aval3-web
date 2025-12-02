@@ -1,4 +1,4 @@
-import { UIRenderer } from "./UiRenderer.js";
+import { UIRenderer } from "./UIRenderer.js";
 import { ModalRenderer } from './ModalRenderer.js';
 
 export class UIManager {
