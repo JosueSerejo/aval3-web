@@ -83,7 +83,8 @@ export class CountryExplorerApp {
         await this.fetchAllCountries();
     }
 
-    _setupEventListeners() {d("mainNav");
+    _setupEventListeners() {
+        // A lógica do menu sanduíche foi removida daqui e deve estar no seu arquivo menu.js.
         
         const countryModal = document.getElementById("countryModal");
         const closeBtn = countryModal.querySelector(".close-btn");
