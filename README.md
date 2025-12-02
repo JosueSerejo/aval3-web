@@ -1,5 +1,7 @@
 # 🌍 **Explorador Interativo de Países e Culturas**
 
+![Capa do Projeto](https://imgur.com/P8uOmMw.png)
+
 Aplicação web desenvolvida como parte da **3ª Avaliação da disciplina de Programação Web** da **Universidade Estadual do Piauí (UESPI)**.
 O projeto utiliza a **REST Countries API** para permitir a exploração de informações culturais, geográficas e políticas de países ao redor do mundo.
 
@@ -12,34 +14,55 @@ O usuário pode buscar países, filtrar por continente, visualizar detalhes comp
 ---
 # 🌐 **Confira o Projeto**
 
-🔗 
+🔗 https://josueserejo.github.io/aval3-web/
 
 ---
 ## 🖼️ **Imagens do Projeto**
 
+| Tela Inicial | Tela de Sobre |
+|--------------|------------------|
+| <img src="https://imgur.com/yEYEmKg.png" width="500"> | <img src="https://imgur.com/ZNKBP0I.png" width="615"> |
+
+| Cards | Favoritos |
+|------------|--------|
+| <img src="https://imgur.com/LASQc2i.png" width="555"> | <img src="https://imgur.com/G3bSmLO.png" width="555"> |
 
 ---
 ## 🚀 **Funcionalidades**
 
 -Busca dinâmica de países por nome
+
 -Filtro por continente
+
 -Exibição de bandeira, capital, população, região e idiomas
+
 -Página/modal com detalhes completos (moedas, fronteiras, domínios, mapas, área…)
+
 -Sistema de favoritos usando localStorage
+
 -Spinner de carregamento
+
 -Tratamento de erros (API/offline/país inexistente)
+
 -UI responsiva (mobile-first)
+
 -Página “Sobre”
+
 -Rodapé com todos os integrantes da equipe
 
 ---
 ## 🧩 **Tecnologias Utilizadas**
 
 -HTML5 semântico
+
 -CSS3 responsivo
+
 -JavaScript ES6+
+
 -REST Countries API
+
 -Fetch API
+
 -LocalStorage
 
 ---
