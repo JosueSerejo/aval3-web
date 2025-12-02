@@ -14,6 +14,8 @@
     --header-height-mobile: 60px;
 }
 
+
+
 * {
     margin: 0;
     padding: 0;
@@ -703,6 +705,37 @@ ul {
 
 .hidden {
     display: none;
+}
+
+.scroll-to-top {
+    position: fixed;
+    bottom: 30px;
+    right: 30px;
+    background-color: var(--secondary-color);
+    color: var(--primary-color);
+    border: none;
+    border-radius: 50%;
+    width: 50px;
+    height: 50px;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.5);
+    z-index: 999;
+    transition: background-color 0.3s, color 0.3s;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-decoration: none;
+}
+
+.scroll-to-top:hover {
+    background-color: #ffda73;
+    color: var(--primary-color);
+}
+
+.scroll-to-top .arrow-icon {
+    font-size: 1.3rem;
+    line-height: 1;
+    display: block;
+    transform: translateY(-2px);
 }
 
 @media (min-width: 768px) {
