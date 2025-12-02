@@ -775,6 +775,52 @@ ul {
     transform: translateY(-2px);
 }
 
+
+/* sobre */
+
+.about-card {
+    background: #464545;
+    border-radius: 12px;
+    box-shadow: 0 2px 12px rgba(0, 0, 0, 0.10);
+    padding: 44px 20px;
+    max-width: 1300px;
+    margin: 40px auto;
+    color: #333;
+    font-size: 20px;
+    color: #f4f4f4;
+}
+
+.team-members {
+    display: flex;
+    justify-content: space-around;
+    flex-wrap: wrap;
+    gap: 20px;
+}
+
+.member {
+    text-align: center;
+    max-width: 200px;
+    margin-top: 30px;
+}
+
+.member img {
+    width: 100%;
+    max-width: 150px;
+    border-radius: 20%;
+    margin-bottom: 10px;
+}
+
+.member p {
+    font-weight: bold;
+    text-align: center;
+}
+
+.member small {
+    font-size: 0.9rem;
+    color: #777;
+}
+
+
 @media (min-width: 768px) {
     .menu-toggle-label {
         display: none;
