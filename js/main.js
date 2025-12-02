@@ -1,6 +1,6 @@
-import { CountryExplorerApp } from './AppLogic.js';
+import { CountryExplorerApp } from './modules/AppLogic.js'; 
 
 document.addEventListener("DOMContentLoaded", () => {
-    window.app = new CountryExplorerApp();
-    app.init();
+    window.app = new CountryExplorerApp();
+    app.init();
 });
