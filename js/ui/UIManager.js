@@ -1,5 +1,5 @@
-import { UIRenderer } from './UiRenderer.js'; 
-import { ModalRenderer } from './ModalRenderer.js'; 
+import { UIRenderer } from "./UiRenderer.js";
+import { ModalRenderer } from './ModalRenderer.js';
 
 export class UIManager {
     constructor(app) {
@@ -54,5 +54,28 @@ export class UIManager {
     
     renderModalDetails(country) {
         this.modalRenderer.renderModalDetails(country);
+    }
+
+    showSearchClearButton(inputElement) {
+        const clearBtn = document.getElementById("clearSearchBtn");
+        
+        if (clearBtn) {
+            clearBtn.classList.remove("hidden");
+            
+            clearBtn.onclick = async () => {
+                inputElement.value = ''; 
+                this.hideSearchClearButton();
+                this.app.deactivateFavoritesFilter(); 
+                await this.app.fetchAllCountries();
+            };
+        }
+    }
+
+    hideSearchClearButton() {
+        const clearBtn = document.getElementById("clearSearchBtn");
+        if (clearBtn) {
+            clearBtn.classList.add("hidden");
+            clearBtn.onclick = null;
+        }
     }
 }

@@ -1,4 +1,4 @@
-import { UIManager } from '../ui/UIManager.js';
+import { UIManager } from '../ui/UIManager.js'; 
 import { CountryService } from './CountryService.js'; 
 import { FavoritesManager } from './FavoritesManager.js';
 
@@ -25,13 +25,20 @@ export class CountryExplorerApp {
         const favoritesBtn = document.getElementById("favoritesBtn");
 
         document.getElementById("searchBtn").addEventListener("click", async () => {
-            const name = document.getElementById("searchInput").value.trim();
+            const inputElement = document.getElementById("searchInput");
+            const name = inputElement.value.trim();
+            
             this.deactivateFavoritesFilter();
+
             if (!name) {
-                await this.fetchAllCountries();
-            } else {
-                await this.searchCountry(name);
+                alert("Por favor, digite o nome de um país para buscar.");
+                this.ui.hideSearchClearButton();
+                return;
             }
+            
+            this.ui.showSearchClearButton(inputElement); 
+            
+            await this.searchCountry(name);
         });
 
         document.getElementById("searchInput").addEventListener("keypress", e => {
@@ -40,6 +47,7 @@ export class CountryExplorerApp {
 
         document.getElementById("continentFilter").addEventListener("change", async e => {
             this.deactivateFavoritesFilter();
+            this.ui.hideSearchClearButton();
             await this.filterByContinent(e.target.value);
         });
 
@@ -71,6 +79,7 @@ export class CountryExplorerApp {
     }
 
     async fetchAllCountries() {
+        this.ui.hideSearchClearButton();
         await this._loadAndRender(() => this.service.fetchAllCountries());
     }
 

@@ -38,8 +38,15 @@
         <section class="search-area">
             <div class="search-filter-wrapper">
                 <div class="search-filter-row">
+                    
                     <div class="search-box">
-                        <input type="text" id="searchInput" placeholder="Buscar país..." />
+                        
+                        <div class="input-wrapper">
+                            <input type="text" id="searchInput" placeholder="Buscar país..." />
+                            
+                            <button id="clearSearchBtn" class="hidden">X</button>
+                        </div>
+                        
                         <button id="searchBtn">Buscar</button>
                     </div>
 
@@ -131,6 +138,7 @@
         <div class="modal-content">
             <span class="close-btn">&times;</span>
             <div id="modalDetails">
+                <div id="modalLoading" class="spinner hidden"></div>
                 <div class="modal-header">
                     <img id="modalFlag" src="" alt="Bandeira">
                     <h2 id="modalName">Nome do País</h2>
