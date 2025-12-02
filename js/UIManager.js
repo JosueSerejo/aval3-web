@@ -3,6 +3,7 @@ export class UIManager {
         this.app = app;
         this.COUNTRIES_PER_PAGE = 8;
         this.currentPage = 1;
+        this.MIN_LOADING_TIME = 800;
     }
 
     showLoading(containerId = "loading") {
@@ -30,10 +31,14 @@ export class UIManager {
         this.showLoading();
         this.currentPage = page;
 
+        const delayPromise = new Promise(resolve => setTimeout(resolve, this.MIN_LOADING_TIME));
+
         const startIndex = (page - 1) * this.COUNTRIES_PER_PAGE;
         const endIndex = startIndex + this.COUNTRIES_PER_PAGE;
 
         const countriesToRender = list.slice(startIndex, endIndex);
+
+        await delayPromise;
 
         this.renderCountries(countriesToRender);
         this.renderPaginationControls(list);
@@ -52,7 +57,7 @@ export class UIManager {
 
         list.forEach(country => {
             const flagSrc = country.flags.svg || country.flags.png;
-            const isFav = this.app.favoritesManager.isFavorite(country.cca3); 
+            const isFav = this.app.favoritesManager.isFavorite(country.cca3);
 
             const card = document.createElement("div");
             card.className = "country-card";
@@ -78,7 +83,7 @@ export class UIManager {
                 btn.addEventListener("click", (e) => {
                     e.stopPropagation();
                     const code = btn.getAttribute("data-code");
-                    this.app.favoritesManager.toggleFavorite(code); 
+                    this.app.favoritesManager.toggleFavorite(code);
                     const nowFav = this.app.favoritesManager.isFavorite(code);
                     btn.classList.toggle("saved", nowFav);
                     btn.lastChild.textContent = nowFav ? " Favoritado" : " Favoritar";
@@ -110,7 +115,18 @@ export class UIManager {
         if (end - start + 1 < maxButtons) start = Math.max(1, end - maxButtons + 1);
 
         for (let i = start; i <= end; i++) {
-            buttonsHTML += `<button class="page-btn ${i === this.currentPage ? 'active' : ''}" onclick="app.goToPage(${i})">${i}</button>`;
+            const isActive = i === this.currentPage;
+
+            let pageButtonHTML = `<button class="page-btn ${isActive ? 'active' : ''}"`;
+
+            if (!isActive) {
+                pageButtonHTML += ` onclick="app.goToPage(${i})"`;
+            } else {
+                pageButtonHTML += ` disabled`;
+            }
+
+            pageButtonHTML += `>${i}</button>`;
+            buttonsHTML += pageButtonHTML;
         }
 
         buttonsHTML += `<button ${this.currentPage === totalPages ? 'disabled' : ''} onclick="app.goToPage(${this.currentPage + 1})">Próxima</button>`;

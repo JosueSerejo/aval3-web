@@ -129,7 +129,6 @@ export class CountryExplorerApp {
 
     async _loadAndRender(loadDataFn) {
         this.ui.showLoading();
-        await new Promise(resolve => setTimeout(resolve, 0)); 
         try {
             const data = await loadDataFn(); 
             this.globalCountriesList = data.sort((a, b) => a.name.common.localeCompare(b.name.common));
