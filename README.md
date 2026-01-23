@@ -2,10 +2,9 @@
 
 ![Capa do Projeto](https://imgur.com/P8uOmMw.png)
 
-Aplicação web desenvolvida como parte da **3ª Avaliação da disciplina de Programação Web** da **Universidade Estadual do Piauí (UESPI)**.
-O projeto utiliza a **REST Countries API** para permitir a exploração de informações culturais, geográficas e políticas de países ao redor do mundo.
+Aplicação web desenvolvida utilizando a **REST Countries API** para permitir a exploração de informações culturais, geográficas e políticas de países ao redor do mundo.
 
-O usuário pode buscar países, filtrar por continente, visualizar detalhes completos, salvar favoritos e navegar por uma interface moderna e responsiva.
+Na Countree o usuário pode buscar países, filtrar por continente, visualizar detalhes completos, salvar favoritos e navegar por uma interface moderna e responsiva.
 
 ---
 ## 🏷️ **Badges**
@@ -14,7 +13,7 @@ O usuário pode buscar países, filtrar por continente, visualizar detalhes comp
 ---
 # 🌐 **Confira o Projeto**
 
-🔗 https://josueserejo.github.io/aval3-web/
+🔗 https://josueserejo.github.io/countree/
 
 ---
 ## 🖼️ **Imagens do Projeto**
@@ -36,15 +35,15 @@ O usuário pode buscar países, filtrar por continente, visualizar detalhes comp
 
 -Exibição de bandeira, capital, população, região e idiomas
 
--Página/modal com detalhes completos (moedas, fronteiras, domínios, mapas, área…)
+-modal com detalhes completos (moedas, fronteiras, domínios, mapas, área…)
 
 -Sistema de favoritos usando localStorage
 
 -Spinner de carregamento
 
--Tratamento de erros (API/offline/país inexistente)
+-Tratamento de erros
 
--UI responsiva (mobile-first)
+-UI responsiva
 
 -Página “Sobre”
 
@@ -72,12 +71,3 @@ O usuário pode buscar países, filtrar por continente, visualizar detalhes comp
 |------|------------|
 | Adonias Pereira dos Santos Terceiro | 2024031042 |
 | Willamy Josué Santos Serejo | 2024030930 |
-
----
-## ✍️ **Informações Acadêmicas**
-
-**Universidade Estadual do Piauí – UESPI**  
-**Curso:** Tecnologia em Sistemas de Computação  
-**Disciplina:** Programação Web  
-**Professor:** Eyder Rios  
-📅 **Data de entrega:** 02/12/2025
